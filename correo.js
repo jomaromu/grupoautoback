@@ -1,42 +1,57 @@
 const express = require('express');
 const nodemailer = require("nodemailer");
 const bodyParse = require('body-parser');
+const { google } = require('googleapis');
 
 const app = express();
 app.use(bodyParse.urlencoded({ extended: true }));
 
 app.post('/', (req, resp, next) => {
 
-    const main = async() => {
+    // google
+    const CLIENT_ID = '537728391366-qj1jvaho39hftbkbohhtqu1t86r4def7.apps.googleusercontent.com';
+    const CLIENT_SECRET = 'KwJzcA_aKtDLfbnGJ9Wkm4iz';
+    const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
+    const REFRESH_TOKEN = '1//04JMWlnRMeaK1CgYIARAAGAQSNwF-L9IrlfGHmaVUMPSRPTYUIzqxYmrYowx5nBVtB8dZIlCGRitmsELmlxwX4K9lI30_psUtqu0';
 
-        // create reusable transporter object using the default SMTP transport
-        let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: 'jomaromu2@gmail.com', // generated ethereal user
-                pass: '2009momomo.' // generated ethereal password
-            },
-        });
+    const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_ID, REDIRECT_URI);
 
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" <jomaromu2@gmail.com>', // sender address
-            to: "jomaromu2@gmail.com, jomaromu2@gmail.com", // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
-        });
+    const sendMail = async() => {
 
-        console.log(info.messageId);
+        try {
+            const accessToken = await oAuth2Client.getAccessToken();
+            const transport = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    type: 'OAuth2',
+                    user: 'jroserodevpa@gmail.com',
+                    clientId: CLIENT_ID,
+                    clientSecret: CLIENT_SECRET,
+                    refreshToken: REFRESH_TOKEN,
+                    accessToken: accessToken
+                }
+            });
 
+            const mailOptions = {
+                from: 'jroserodevpa <jroserodevpa@gmail.com>',
+                to: 'jomaromu2@gmail.com',
+                subject: 'Prueba',
+                text: 'Este es un texto de prueba',
+                html: '<h6>Texto en html</h6>'
+            }
+
+            const result = await transport.sendMail(mailOptions);
+            return result;
+
+        } catch (error) {
+            return error;
+        }
     }
 
-    main().then((resp) => {
+    sendMail().then((resp) => {
         console.log(resp);
-    }).catch((resp) => {
-        console.log(resp);
+    }).catch((error) => {
+        console.log(error);
     });
 });
 

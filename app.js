@@ -1,5 +1,4 @@
 const express = require('express');
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 // iniciar express
 const app = express();
