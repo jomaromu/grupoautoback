@@ -12,8 +12,8 @@ app.post('/', async(req, resp, next) => {
     const CLIENT_ID = '537728391366-qj1jvaho39hftbkbohhtqu1t86r4def7.apps.googleusercontent.com';
     const CLIENT_SECRET = 'KwJzcA_aKtDLfbnGJ9Wkm4iz';
     const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
-    const REFRESH_TOKEN = '1//04JMWlnRMeaK1CgYIARAAGAQSNwF-L9IrlfGHmaVUMPSRPTYUIzqxYmrYowx5nBVtB8dZIlCGRitmsELmlxwX4K9lI30_psUtqu0';
-    const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_ID, REDIRECT_URI);
+    const REFRESH_TOKEN = '1//04xdiNxj8OPxnCgYIARAAGAQSNwF-L9IrfJHwwiY_4Q6wC-lXzZkZrmX2vUo_ICZA68bM2kmswUDyQnwk4Ynpt0U1lWh7i0YoI7g';
+    const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
     oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
     const sendMail = async() => {
