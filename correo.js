@@ -1,10 +1,17 @@
 const express = require('express');
 const nodemailer = require("nodemailer");
 const bodyParse = require('body-parser');
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
 const { google } = require('googleapis');
 
 const app = express();
+app.use(cors());
+
 app.use(bodyParse.urlencoded({ extended: true }));
+app.use(bodyParse.json())
+
+app.use(fileUpload())
 
 app.post('/', async(req, resp, next) => {
 
@@ -34,11 +41,11 @@ app.post('/', async(req, resp, next) => {
             });
 
             const mailOptions = {
-                from: 'jroserodevpa <jroserodevpa@gmail.com>',
+                from: `${req.body.nombre} <${req.body.correo}>`,
                 to: 'jomaromu2@gmail.com',
-                subject: 'Prueba',
-                text: 'Este es un texto de prueba',
-                html: '<h6>Texto en html</h6>'
+                subject: `Consulta desde grupoautopana.com`,
+                // text: ,
+                html: `<h3>${req.body.mensaje}</h3>`
             }
 
             const result = await transport.sendMail(mailOptions);
