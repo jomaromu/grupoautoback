@@ -9,9 +9,15 @@ const app = express();
 app.use(cors());
 
 app.use(bodyParse.urlencoded({ extended: true }));
-app.use(bodyParse.json())
+app.use(bodyParse.json());
 
-app.use(fileUpload())
+app.use(fileUpload());
+
+app.get('/', (req, resp, next) => {
+    resp.status(200).json({
+        ok: true,
+    });
+});
 
 app.post('/', async(req, resp, next) => {
 
@@ -57,9 +63,15 @@ app.post('/', async(req, resp, next) => {
     }
 
     sendMail().then((resp) => {
-        console.log(resp);
+        return resp.status(200).json({
+            ok: true,
+            mensaje: resp
+        });
     }).catch((error) => {
-        console.log(error);
+        return resp.status(500).json({
+            ok: false,
+            mensaje: error
+        });
     });
 });
 
