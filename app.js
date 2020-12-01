@@ -1,15 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const https = require('https');
 const fs = require('fs');
 
-const key = fs.readFileSync(__dirname + '/selfsigned.key');
-const cert = fs.readFileSync(__dirname + '/selfsigned.crt');
-
-const opcionSsl = {
-    key: key,
-    cert: cert
-}
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 // iniciar express
 const app = express();
@@ -23,8 +16,6 @@ const correo = require('./correo');
 // uso de la ruta
 app.use('/', correo);
 
-const server = https.createServer(opcionSsl, app);
-
-server.listen(3000, () => {
+app.listen(3000, () => {
     console.log('Escuchando el el puerto 3000');
 });
